@@ -8,9 +8,7 @@ inputs:
     description: "ssh key for the deployment"
   github_token:
     description: "github token"
-    
-   
-  
+
 runs:
   using: "composite"
   steps:
@@ -19,10 +17,12 @@ runs:
         key: ${{ ssh_deploy_key }}
         known_hosts: 'no-hosts'
     - name: install pulu-cli
+    shell: bash
       run: |
         curl -L https://github.com/vives-projectwerk-2021/pulu-cli/releases/latest/download/pulu-linux -o /usr/local/bin/pulu
         chmod +x /usr/local/bin/pulu
     - id: sandbox
+      shell: bash
       run: |
         pulu exec staging "docker rm -f ${{pulu_build}}"
         export PULU_FRONTEND_PORT=$(ruby -e 'require "socket"; puts Addrinfo.tcp("", 0).bind {|s| s.local_address.ip_port }')
