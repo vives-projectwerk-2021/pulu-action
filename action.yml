@@ -2,8 +2,15 @@ name: "composite for pulu"
 description: "action to be called for use in other actions"
 
 inputs:
+  pulu_build:
+    description: "which pulu endpoint + build output"
+  ssh_deploy_key: 
+    description: "ssh key for the deployment"
+  github_token:
+    description: "github token"
+    
+   
   
-
 runs:
   using: "composite"
   steps:
