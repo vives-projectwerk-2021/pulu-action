@@ -1,12 +1,15 @@
 name: "composite for pulu"
 description: "action to be called for use in other actions"
 
+inputs:
+  
+
 runs:
   using: "composite"
   steps:
     - uses: shimataro/ssh-key-action@v2
       with:
-        key: ${{ secrets.SSH_DEPLOY_KEY }}
+        key: ${{ ssh_deploy_key }}
         known_hosts: 'no-hosts'
     - name: install pulu-cli
       run: |
@@ -14,10 +17,10 @@ runs:
         chmod +x /usr/local/bin/pulu
     - id: sandbox
       run: |
-        pulu exec staging "docker rm -f pulu-frontend.${{ needs.build.outputs.pr }}"
+        pulu exec staging "docker rm -f ${{pulu_build}}"
         export PULU_FRONTEND_PORT=$(ruby -e 'require "socket"; puts Addrinfo.tcp("", 0).bind {|s| s.local_address.ip_port }')
         pulu exec staging " \
-        docker run -t --name pulu-frontend.${{ needs.build.outputs.pr }} --privileged \
+        docker run -t --name ${{pulu_build}} --privileged \
         -v /devops/.ssh/id_rsa:/root/.ssh/id_rsa \
         -v /devops/deployment/staging/.env:/pulu.env \
         -p $PULU_FRONTEND_PORT:8080 \
@@ -25,11 +28,11 @@ runs:
         ghcr.io/vives-projectwerk-2021/pulu-sandbox \
         make production"
 
-        pulu exec staging "docker start pulu-frontend.${{ needs.build.outputs.pr }}"
+        pulu exec staging "docker start ${{pulu_build}}"
 
         echo "::set-output name=PORT::$PULU_FRONTEND_PORT"
 
     - uses: thollander/actions-comment-pull-request@v1
       with:
         message: 'You can now proxy this deployment: `pulu proxy staging ${{ steps.sandbox.outputs.PORT }}`'
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ github_token }}
