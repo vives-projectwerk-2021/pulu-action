@@ -28,17 +28,17 @@ runs:
     - id: sandbox
       shell: bash
       run: |
-        pulu exec staging "docker rm -f ${{${{ pulu_endpoint }}.${{ pulu_build }}}}"
+        pulu exec staging "docker rm -f pulu-frontend.${{ pulu_build }}}}"
         export PULU_FRONTEND_PORT=$(ruby -e 'require "socket"; puts Addrinfo.tcp("", 0).bind {|s| s.local_address.ip_port }')
         pulu exec staging " \
-        docker run -t --name ${{ pulu_endpoint }}.${{ pulu_build }} --privileged \
+        docker run -t --name pulu-frontend.${{ pulu_build }} --privileged \
         -v /devops/.ssh/id_rsa:/root/.ssh/id_rsa \
         -v /devops/deployment/staging/.env:/pulu.env \
         -p $PULU_FRONTEND_PORT:8080 \
         -e PULU_FRONTEND="${{ inputs.image }}" \
         ghcr.io/vives-projectwerk-2021/pulu-sandbox \
         make production"
-        pulu exec staging "docker start ${{ pulu_endpoint }}.${{ pulu_build }}"
+        pulu exec staging "docker start pulu-frontend.${{ pulu_build }}"
         echo "::set-output name=PORT::$PULU_FRONTEND_PORT"
     - uses: thollander/actions-comment-pull-request@v1
       with:
