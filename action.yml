@@ -2,8 +2,6 @@ name: "composite for pulu"
 description: "action to be called for use in other actions"
 
 inputs:
-  pulu_endpoint:
-    description: "which pulu endpoint"
   pulu_build:
     description: "build output"
   ssh_deploy_key: 
