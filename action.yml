@@ -35,6 +35,7 @@ runs:
         -v /devops/.ssh/id_rsa:/root/.ssh/id_rsa \
         -v /devops/deployment/staging/.env:/pulu.env \
         -p $PULU_PROXY_PORT:8080 \
+        -e PULU_FRONTEND="ghcr.io/vives-projectwerk-2021/vue-frontend:latest" \
         -e ${{inputs.pulu_endpoint}}="${{ inputs.image }}" \
         ghcr.io/vives-projectwerk-2021/pulu-sandbox \
         make production"
@@ -44,3 +45,6 @@ runs:
       with:
         message: 'You can now proxy this deployment: `pulu proxy staging ${{ steps.sandbox.outputs.PORT }}`'
         GITHUB_TOKEN: ${{ inputs.github_token }}
+        
+#     -e PULU_FRONTEND="ghcr.io/vives-projectwerk-2021/vue-frontend:latest" \
+#     needed for ttn-listener and backend
