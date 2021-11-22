@@ -10,6 +10,8 @@ inputs:
     description: "github token"
   image:
     description: "image"
+  pulu_endpoint:
+    description: "which endpoint this action is being used for"
 
 runs:
   using: "composite"
