@@ -48,3 +48,7 @@ runs:
         
 #     -e PULU_FRONTEND="ghcr.io/vives-projectwerk-2021/vue-frontend:latest" \
 #     needed for ttn-listener and backend
+
+
+    pulu exec staging "docker rm -f ${{ inputs.pulu_build }}"
+    pulu exec staging "docker volume prune -f"
