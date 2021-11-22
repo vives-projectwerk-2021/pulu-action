@@ -26,7 +26,7 @@ runs:
     - id: sandbox
       shell: bash
       run: |
-        pulu exec staging "docker rm -f pulu-frontend.${{ pulu_build }}}}"
+        pulu exec staging "docker rm -f pulu-frontend.${{ pulu_build }}"
         export PULU_FRONTEND_PORT=$(ruby -e 'require "socket"; puts Addrinfo.tcp("", 0).bind {|s| s.local_address.ip_port }')
         pulu exec staging " \
         docker run -t --name pulu-frontend.${{ pulu_build }} --privileged \
