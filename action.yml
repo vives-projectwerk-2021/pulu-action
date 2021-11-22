@@ -29,7 +29,7 @@ runs:
         pulu exec staging "docker rm -f ${{ inputs.pulu_build }}"
         export PULU_FRONTEND_PORT=$(ruby -e 'require "socket"; puts Addrinfo.tcp("", 0).bind {|s| s.local_address.ip_port }')
         pulu exec staging " \
-        docker run -t --name ${{ inputs.pulu_build }} --privileged \
+        docker run -t --restart unless-stopped --name ${{ inputs.pulu_build }} --privileged \
         -v /devops/.ssh/id_rsa:/root/.ssh/id_rsa \
         -v /devops/deployment/staging/.env:/pulu.env \
         -p $PULU_FRONTEND_PORT:8080 \
